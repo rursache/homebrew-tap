@@ -1,8 +1,8 @@
 class SoloCli < Formula
   desc "Terminal-based user interface for SOLO.ro (Romanian PFA accounting)"
   homepage "https://github.com/rursache/solo-cli"
-  url "https://github.com/rursache/solo-cli/archive/refs/tags/v1.1.1.tar.gz"
-  sha256 "14e779b8eb66a73959f106eec2be835ef6bd5ac7e52f1907ae0fe74630007d47"
+  url "https://github.com/rursache/solo-cli/archive/refs/tags/v1.2.0.tar.gz"
+  sha256 "983f1cd1f099f3c61cd9510c16a3211ac992fffcbe861283d4f813949b294799"
   license "MIT"
 
   head "https://github.com/rursache/solo-cli.git", branch: "master"
