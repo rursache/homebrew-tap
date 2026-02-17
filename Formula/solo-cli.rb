@@ -10,31 +10,25 @@ class SoloCli < Formula
   depends_on "go" => :build
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}"), "."
+    system "go", "build", *std_go_args(output: bin/".solo-cli-bin", ldflags: "-s -w -X main.version=#{version}"), "."
 
-    # Install AI skill files to share/solo-cli/skill
+    # Install AI skill files
     pkgshare.install "skill"
 
-    # Install setup script for AI skills
-    (bin/"solo-cli-setup-skills").write <<~SH
+    # Wrapper script: installs skills on first run, then execs the real binary
+    (bin/"solo-cli").write <<~SH
       #!/bin/bash
-      set -e
       SKILL_SRC="#{pkgshare}/skill"
-      for parent in .agents .claude; do
-        DEST="$HOME/$parent/skills/solo-cli"
-        rm -rf "$DEST"
-        mkdir -p "$DEST"
-        cp -R "$SKILL_SRC"/* "$DEST"/
-      done
-      echo "AI skills installed to ~/.agents/skills/solo-cli and ~/.claude/skills/solo-cli"
+      if [ ! -f "$HOME/.claude/skills/solo-cli/SKILL.md" ] || [ "$SKILL_SRC/SKILL.md" -nt "$HOME/.claude/skills/solo-cli/SKILL.md" ]; then
+        for parent in .agents .claude; do
+          DEST="$HOME/$parent/skills/solo-cli"
+          rm -rf "$DEST"
+          mkdir -p "$DEST"
+          cp -R "$SKILL_SRC"/* "$DEST"/
+        done
+      fi
+      exec "#{bin}/.solo-cli-bin" "$@"
     SH
-  end
-
-  def caveats
-    <<~EOS
-      To install AI skills for Claude Code and other agents, run:
-        solo-cli-setup-skills
-    EOS
   end
 
   test do
