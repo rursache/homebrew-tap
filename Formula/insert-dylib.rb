@@ -11,8 +11,8 @@ class InsertDylib < Formula
   depends_on :macos
 
   def install
-    system ENV.cc, "-O2", "-o", "insert_dylib", "insert_dylib/main.c"
-    bin.install "insert_dylib"
+    system ENV.cc, "-O2", "-o", "build_output", "insert_dylib/main.c"
+    bin.install "build_output" => "insert_dylib"
   end
 
   test do
