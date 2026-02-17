@@ -45,11 +45,14 @@ jobs:
           SHA256=$(shasum -a 256 "${FORMULA}.tar.gz" | awk '{print $1}')
           
           # Update the formula
-          sed -i '' "s/version \".*\"/version \"${VERSION}\"/" "Formula/${FORMULA}.rb"
-          sed -i '' "s/sha256 \".*\"/sha256 \"${SHA256}\"/" "Formula/${FORMULA}.rb"
           sed -i '' "s|url \".*\"|url \"${DOWNLOAD_URL}\"|" "Formula/${FORMULA}.rb"
-          
-          # Commit and push
+          sed -i '' "s/sha256 \".*\"/sha256 \"${SHA256}\"/" "Formula/${FORMULA}.rb"
+
+          # Commit and push (skip if formula is already up to date)
           git add "Formula/${FORMULA}.rb"
-          git commit -m "Update ${FORMULA} to ${TAG}"
-          git push
+          if git diff --cached --quiet; then
+            echo "Formula is already up to date for ${TAG}"
+          else
+            git commit -m "Update ${FORMULA} to ${TAG}"
+            git push
+          fi
