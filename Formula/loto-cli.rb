@@ -11,6 +11,18 @@ class LotoCli < Formula
 
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}"), "."
+
+    # Install AI skill files
+    pkgshare.install "skill"
+  end
+
+  def post_install
+    %w[.agents .claude].each do |parent|
+      skill_dir = Pathname.new(Dir.home)/parent/"skills"/"loto-cli"
+      rm_rf skill_dir
+      mkdir_p skill_dir
+      cp_r (pkgshare/"skill").children, skill_dir
+    end
   end
 
   test do
