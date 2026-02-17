@@ -12,17 +12,29 @@ class LotoCli < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}"), "."
 
-    # Install AI skill files
+    # Install AI skill files to share/loto-cli/skill
     pkgshare.install "skill"
+
+    # Install setup script for AI skills
+    (bin/"loto-cli-setup-skills").write <<~SH
+      #!/bin/bash
+      set -e
+      SKILL_SRC="#{pkgshare}/skill"
+      for parent in .agents .claude; do
+        DEST="$HOME/$parent/skills/loto-cli"
+        rm -rf "$DEST"
+        mkdir -p "$DEST"
+        cp -R "$SKILL_SRC"/* "$DEST"/
+      done
+      echo "AI skills installed to ~/.agents/skills/loto-cli and ~/.claude/skills/loto-cli"
+    SH
   end
 
-  def post_install
-    %w[.agents .claude].each do |parent|
-      skill_dir = "#{Dir.home}/#{parent}/skills/loto-cli"
-      system "rm", "-rf", skill_dir
-      system "mkdir", "-p", skill_dir
-      system "cp", "-R", *Dir["#{pkgshare}/skill/*"], skill_dir
-    end
+  def caveats
+    <<~EOS
+      To install AI skills for Claude Code and other agents, run:
+        loto-cli-setup-skills
+    EOS
   end
 
   test do
