@@ -18,10 +18,10 @@ class LotoCli < Formula
 
   def post_install
     %w[.agents .claude].each do |parent|
-      skill_dir = Pathname.new(Dir.home)/parent/"skills"/"loto-cli"
-      rm_rf skill_dir
-      mkdir_p skill_dir
-      cp_r (pkgshare/"skill").children, skill_dir
+      skill_dir = "#{Dir.home}/#{parent}/skills/loto-cli"
+      system "rm", "-rf", skill_dir
+      system "mkdir", "-p", skill_dir
+      system "cp", "-R", *Dir["#{pkgshare}/skill/*"], skill_dir
     end
   end
 
