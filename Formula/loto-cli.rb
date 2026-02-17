@@ -1,8 +1,8 @@
 class LotoCli < Formula
   desc "Terminal-based interface for Loteria Romana (Romanian national lottery)"
   homepage "https://github.com/rursache/loto-cli"
-  url "https://github.com/rursache/loto-cli/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "6ef90c07d6c18a5669f06d8c716ffb72355aec66f944bbba4eb89c3e177cfe10"
+  url "https://github.com/rursache/loto-cli/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "8abfc0004276c59a5fd5d0398b55ddb1c428d50f5fc73c1b13f51fbfa60414ad"
   license "MIT"
 
   head "https://github.com/rursache/loto-cli.git", branch: "master"
