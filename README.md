@@ -1,6 +1,6 @@
 # rursache's Homebrew Tap
 
-This repository hosts custom Homebrew formulae for my CLI tools and projects.
+This repository hosts custom Homebrew formulas for my CLI tools and projects.
 
 ## Installation
 
@@ -10,26 +10,24 @@ Add the tap:
 brew tap rursache/tap
 ```
 
-## Available Formulae
+## Available Formulas
 
 | Formula | Description |
-|Str|Str|
+|---------|-------------|
 | [`solo-cli`](https://github.com/rursache/solo-cli) | A terminal-based user interface for SOLO.ro, an online accounting platform for Romanian freelancers (PFA) |
 | [`loto-cli`](https://github.com/rursache/loto-cli) | A terminal-based interface for Loteria Romana, Romania's national lottery |
 
 ## Usage
 
-Install a specific tool:
+Install any formula from this tap:
 
 ```bash
-brew install solo-cli
-# or
-brew install loto-cli
+brew install rursache/tap/<formula>
 ```
 
 ## Updating
 
-Update the tap and upgrade installed formulae:
+Update the tap and upgrade installed formulas:
 
 ```bash
 brew update
