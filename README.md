@@ -14,6 +14,7 @@ brew tap rursache/tap
 
 | Formula Name | Description |
 |---------|-------------|
+| [`bird-cli`](https://github.com/rursache/bird-bin/releases) | A fast X/Twitter CLI for tweeting, replying, and reading via GraphQL |
 | [`solo-cli`](https://github.com/rursache/solo-cli) | A terminal-based user interface for SOLO.ro, an online accounting platform for Romanian freelancers (PFA) |
 | [`loto-cli`](https://github.com/rursache/loto-cli) | A terminal-based interface for Loteria Romana, Romania's national lottery |
 | [`insert_dylib`](https://github.com/tyilo/insert_dylib) | CLI for injecting a dylib load command into a Mach-O binary (iOS, macOS, etc) |
