@@ -87,3 +87,4 @@ open('$FORMULA_FILE', 'w').write(content)
             git commit -m "Update ${FORMULA} to ${TAG}"
             git push
           fi
+
