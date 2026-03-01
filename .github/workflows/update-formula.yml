@@ -24,54 +24,39 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Setup Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      
+
       - name: Update formula
         run: |
           FORMULA="${{ github.event.inputs.formula }}"
           TAG="${{ github.event.inputs.tag }}"
           REPO="${{ github.event.inputs.repository }}"
           VERSION="${TAG#v}"
-
           FORMULA_FILE="Formula/${FORMULA}.rb"
-
-          # Check if formula uses pre-built binaries (multiple url/sha256 blocks)
           URL_COUNT=$(grep -c 'url "' "$FORMULA_FILE" || true)
 
           if [ "$URL_COUNT" -gt 1 ]; then
-            # Binary formula: download checksums and update each platform URL + SHA
             CHECKSUMS_URL="https://github.com/${REPO}/releases/download/${TAG}/checksums.txt"
             curl -sSfL "$CHECKSUMS_URL" -o checksums.txt
-
-            # Update version
             sed -i '' "s/version \".*\"/version \"${VERSION}\"/" "$FORMULA_FILE"
-
-            # Update each platform target
             for TARGET in darwin-arm64 darwin-x64 linux-x64; do
-              OLD_URL_PATTERN="bird-v[^\"]*-${TARGET}\\.tar\\.gz"
               NEW_FILE="bird-${TAG}-${TARGET}.tar.gz"
               NEW_URL="https://github.com/${REPO}/releases/download/${TAG}/${NEW_FILE}"
               NEW_SHA=$(grep "${NEW_FILE}" checksums.txt | awk '{print $1}')
-
               if [ -n "$NEW_SHA" ]; then
-                sed -i '' "s|url \".*${OLD_URL_PATTERN}\"|url \"${NEW_URL}\"|" "$FORMULA_FILE"
-                # Update the sha256 on the line immediately following the matched url
-                python3 -c "
-import re, sys
-content = open('$FORMULA_FILE').read()
-pattern = r'(url \".*${TARGET}\.tar\.gz\")\n(\s*)sha256 \"[a-f0-9]+\"'
-replacement = r'\1\n\2sha256 \"${NEW_SHA}\"'
-content = re.sub(pattern, replacement, content)
-open('$FORMULA_FILE', 'w').write(content)
-"
+                sed -i '' "s|url \".*${TARGET}\.tar\.gz\"|url \"${NEW_URL}\"|" "$FORMULA_FILE"
+                LINE=$(grep -n "${TARGET}\.tar\.gz" "$FORMULA_FILE" | head -1 | cut -d: -f1)
+                if [ -n "$LINE" ]; then
+                  SHA_LINE=$((LINE + 1))
+                  sed -i '' "${SHA_LINE}s/sha256 \".*\"/sha256 \"${NEW_SHA}\"/" "$FORMULA_FILE"
+                fi
               fi
             done
           else
-            # Source formula: single url/sha256
             DOWNLOAD_URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
             curl -L "${DOWNLOAD_URL}" -o "${FORMULA}.tar.gz"
             SHA256=$(shasum -a 256 "${FORMULA}.tar.gz" | awk '{print $1}')
@@ -79,7 +64,6 @@ open('$FORMULA_FILE', 'w').write(content)
             sed -i '' "s/sha256 \".*\"/sha256 \"${SHA256}\"/" "$FORMULA_FILE"
           fi
 
-          # Commit and push (skip if formula is already up to date)
           git add "$FORMULA_FILE"
           if git diff --cached --quiet; then
             echo "Formula is already up to date for ${TAG}"
@@ -87,4 +71,3 @@ open('$FORMULA_FILE', 'w').write(content)
             git commit -m "Update ${FORMULA} to ${TAG}"
             git push
           fi
-
