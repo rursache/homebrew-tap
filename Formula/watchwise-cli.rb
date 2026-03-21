@@ -1,8 +1,8 @@
 class WatchwiseCli < Formula
   desc "Smart movie & TV show recommender powered by your IMDB ratings"
   homepage "https://github.com/rursache/watchwise-cli"
-  url "https://github.com/rursache/watchwise-cli/archive/refs/tags/v0.2.0.tar.gz"
-  sha256 "5f3d1bb955dc190289d0002af65aa1338a8c7db3df844f35d66eb1830529442c"
+  url "https://github.com/rursache/watchwise-cli/archive/refs/tags/v1.0.0.tar.gz"
+  sha256 "e4c03c7d2d3261de46011b76ea4b72e596cff2c93ac0ab552addb7d2364ce798"
   license "MIT"
 
   head "https://github.com/rursache/watchwise-cli.git", branch: "main"
@@ -14,6 +14,6 @@ class WatchwiseCli < Formula
   end
 
   test do
-    assert_match "WATCHWISE", shell_output("echo  | #{bin}/watchwise-cli 2>&1", 1)
+    assert_match "WATCHWISE", shell_output("echo ' ' | #{bin}/watchwise-cli 2>&1", 1)
   end
 end
