@@ -2,7 +2,7 @@ class WatchwiseCli < Formula
   desc "Smart movie & TV show recommender powered by your IMDB ratings"
   homepage "https://github.com/rursache/watchwise-cli"
   url "https://github.com/rursache/watchwise-cli/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "e4c03c7d2d3261de46011b76ea4b72e596cff2c93ac0ab552addb7d2364ce798"
+  sha256 "5428d50eead7a88259a6b36a57ea693d1de82d358ee582b583f2e6fcf690dc6c"
   license "MIT"
 
   head "https://github.com/rursache/watchwise-cli.git", branch: "master"
