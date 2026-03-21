@@ -10,10 +10,10 @@ class WatchwiseCli < Formula
   depends_on "go" => :build
 
   def install
-    system "go", "build", *std_go_args(ldflags: "-s -w"), "."
+    system "go", "build", *std_go_args(ldflags: "-s -w -X main.version=#{version}"), "."
   end
 
   test do
-    assert_match "WATCHWISE", shell_output("echo ' ' | #{bin}/watchwise-cli 2>&1", 1)
+    assert_match version.to_s, shell_output("#{bin}/watchwise-cli -v")
   end
 end
