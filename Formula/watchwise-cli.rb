@@ -5,7 +5,7 @@ class WatchwiseCli < Formula
   sha256 "e4c03c7d2d3261de46011b76ea4b72e596cff2c93ac0ab552addb7d2364ce798"
   license "MIT"
 
-  head "https://github.com/rursache/watchwise-cli.git", branch: "main"
+  head "https://github.com/rursache/watchwise-cli.git", branch: "master"
 
   depends_on "go" => :build
 
