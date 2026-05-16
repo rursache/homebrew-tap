@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       formula:
-        description: 'Formula name (e.g., solo-cli)'
+        description: 'Formula or cask name (e.g., solo-cli, simfiles)'
         required: true
         type: string
       tag:
-        description: 'Release tag to update formula for'
+        description: 'Release tag to update for'
         required: true
         type: string
       repository:
@@ -30,43 +30,67 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Update formula
+      - name: Update formula or cask
         run: |
           FORMULA="${{ github.event.inputs.formula }}"
           TAG="${{ github.event.inputs.tag }}"
           REPO="${{ github.event.inputs.repository }}"
           VERSION="${TAG#v}"
-          FORMULA_FILE="Formula/${FORMULA}.rb"
-          URL_COUNT=$(grep -c 'url "' "$FORMULA_FILE" || true)
 
-          if [ "$URL_COUNT" -gt 1 ]; then
-            CHECKSUMS_URL="https://github.com/${REPO}/releases/download/${TAG}/checksums.txt"
-            curl -sSfL "$CHECKSUMS_URL" -o checksums.txt
-            sed -i '' "s/version \".*\"/version \"${VERSION}\"/" "$FORMULA_FILE"
-            for TARGET in darwin-arm64 darwin-x64 linux-x64; do
-              NEW_FILE="bird-${TAG}-${TARGET}.tar.gz"
-              NEW_URL="https://github.com/${REPO}/releases/download/${TAG}/${NEW_FILE}"
-              NEW_SHA=$(grep "${NEW_FILE}" checksums.txt | awk '{print $1}')
-              if [ -n "$NEW_SHA" ]; then
-                sed -i '' "s|url \".*${TARGET}\.tar\.gz\"|url \"${NEW_URL}\"|" "$FORMULA_FILE"
-                LINE=$(grep -n "${TARGET}\.tar\.gz" "$FORMULA_FILE" | head -1 | cut -d: -f1)
-                if [ -n "$LINE" ]; then
-                  SHA_LINE=$((LINE + 1))
-                  sed -i '' "${SHA_LINE}s/sha256 \".*\"/sha256 \"${NEW_SHA}\"/" "$FORMULA_FILE"
-                fi
-              fi
-            done
+          # Casks (GUI macOS .app distribution): expect a release asset and a
+          # cask file whose `url "..."` interpolates `#{version}` from the
+          # `version "X.Y.Z"` line. We just bump the version, download the
+          # asset, and refresh the sha256.
+          if [ -f "Casks/${FORMULA}.rb" ]; then
+            CASK_FILE="Casks/${FORMULA}.rb"
+            echo "Updating cask: $CASK_FILE"
+
+            sed -i '' "s/version \".*\"/version \"${VERSION}\"/" "$CASK_FILE"
+
+            URL_TEMPLATE=$(grep -E '^\s*url "' "$CASK_FILE" | head -1 | sed -E 's/.*url "(.*)".*/\1/')
+            ASSET_URL=$(echo "$URL_TEMPLATE" | sed "s|#{version}|${VERSION}|g")
+            echo "Downloading $ASSET_URL"
+            curl -sSfL "$ASSET_URL" -o cask-asset
+            SHA=$(shasum -a 256 cask-asset | awk '{print $1}')
+            sed -i '' "s/sha256 \".*\"/sha256 \"${SHA}\"/" "$CASK_FILE"
+            rm -f cask-asset
+
+            FILE="$CASK_FILE"
           else
-            DOWNLOAD_URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
-            curl -L "${DOWNLOAD_URL}" -o "${FORMULA}.tar.gz"
-            SHA256=$(shasum -a 256 "${FORMULA}.tar.gz" | awk '{print $1}')
-            sed -i '' "s|url \".*\"|url \"${DOWNLOAD_URL}\"|" "$FORMULA_FILE"
-            sed -i '' "s/sha256 \".*\"/sha256 \"${SHA256}\"/" "$FORMULA_FILE"
+            FORMULA_FILE="Formula/${FORMULA}.rb"
+            URL_COUNT=$(grep -c 'url "' "$FORMULA_FILE" || true)
+
+            if [ "$URL_COUNT" -gt 1 ]; then
+              CHECKSUMS_URL="https://github.com/${REPO}/releases/download/${TAG}/checksums.txt"
+              curl -sSfL "$CHECKSUMS_URL" -o checksums.txt
+              sed -i '' "s/version \".*\"/version \"${VERSION}\"/" "$FORMULA_FILE"
+              for TARGET in darwin-arm64 darwin-x64 linux-x64; do
+                NEW_FILE="bird-${TAG}-${TARGET}.tar.gz"
+                NEW_URL="https://github.com/${REPO}/releases/download/${TAG}/${NEW_FILE}"
+                NEW_SHA=$(grep "${NEW_FILE}" checksums.txt | awk '{print $1}')
+                if [ -n "$NEW_SHA" ]; then
+                  sed -i '' "s|url \".*${TARGET}\.tar\.gz\"|url \"${NEW_URL}\"|" "$FORMULA_FILE"
+                  LINE=$(grep -n "${TARGET}\.tar\.gz" "$FORMULA_FILE" | head -1 | cut -d: -f1)
+                  if [ -n "$LINE" ]; then
+                    SHA_LINE=$((LINE + 1))
+                    sed -i '' "${SHA_LINE}s/sha256 \".*\"/sha256 \"${NEW_SHA}\"/" "$FORMULA_FILE"
+                  fi
+                fi
+              done
+            else
+              DOWNLOAD_URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
+              curl -L "${DOWNLOAD_URL}" -o "${FORMULA}.tar.gz"
+              SHA256=$(shasum -a 256 "${FORMULA}.tar.gz" | awk '{print $1}')
+              sed -i '' "s|url \".*\"|url \"${DOWNLOAD_URL}\"|" "$FORMULA_FILE"
+              sed -i '' "s/sha256 \".*\"/sha256 \"${SHA256}\"/" "$FORMULA_FILE"
+            fi
+
+            FILE="$FORMULA_FILE"
           fi
 
-          git add "$FORMULA_FILE"
+          git add "$FILE"
           if git diff --cached --quiet; then
-            echo "Formula is already up to date for ${TAG}"
+            echo "${FORMULA} already up to date for ${TAG}"
           else
             git commit -m "Update ${FORMULA} to ${TAG}"
             git push
