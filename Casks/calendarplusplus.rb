@@ -1,6 +1,6 @@
 cask "calendarplusplus" do
-  version "1.0.1"
-  sha256 "4ad56b791decd341c8068beff9754c10b37f28a2b3bc76d6e54865fead40692a"
+  version "1.0.2"
+  sha256 "44b0220cd2ed710c2d6501636fc494893a6b1601cb120e0965d3634772e07f9c"
 
   url "https://github.com/rursache/CalendarPlusPlus/releases/download/v#{version}/CalendarPlusPlus-#{version}.zip"
   name "Calendar++"
