@@ -14,6 +14,7 @@ class VidSummaryCli < Formula
 
   def install
     system "go", "build", *std_go_args(ldflags: "-s -w -X main.Version=#{version}"), "./cmd/vid-summary-cli"
+    bin.install_symlink "vid-summary-cli" => "video-summary"
   end
 
   test do
