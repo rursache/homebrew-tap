@@ -7,7 +7,7 @@ cask "calendarplusplus" do
   desc "Menu bar app to enhance the macOS Calendar experience"
   homepage "https://github.com/rursache/CalendarPlusPlus"
 
-  depends_on macos: ">= :tahoe"
+  depends_on macos: :tahoe
 
   app "CalendarPlusPlus.app"
 

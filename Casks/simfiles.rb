@@ -7,7 +7,7 @@ cask "simfiles" do
   desc "Manage files in the iOS Simulator's Files app storage"
   homepage "https://github.com/rursache/SimFiles"
 
-  depends_on macos: ">= :tahoe"
+  depends_on macos: :tahoe
 
   app "SimFiles.app"
 
