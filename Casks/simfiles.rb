@@ -1,6 +1,6 @@
 cask "simfiles" do
   version "1.2.1"
-  sha256 "dad61fc6d4c31a58e93cb8503f2dadf4be43a5177cdceb4066ac37aa6c2e978f"
+  sha256 "d581be169ef135b9c96b88d1a55b07a927c4562353d44804cc6f0117d52afe29"
 
   url "https://github.com/rursache/SimFiles/releases/download/v#{version}/SimFiles-#{version}.zip"
   name "SimFiles"
