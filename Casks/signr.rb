@@ -1,6 +1,6 @@
 cask "signr" do
-  version "1.0.3"
-  sha256 "d981216db4bb63ddc896045ec77dc73e76cb45d1804d3f48e2a69a8382a87446"
+  version "1.0.4"
+  sha256 "e8c61ef2869b4675babb08c7c069e1d387e72cba839d46391ccf92f69478fbeb"
 
   url "https://github.com/rursache/Signr/releases/download/v#{version}/Signr-#{version}.zip"
   name "Signr"
