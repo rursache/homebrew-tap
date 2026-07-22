@@ -1,8 +1,8 @@
 class VidSummaryCli < Formula
   desc "Summarize videos via a yt-dlp -> ffmpeg -> whisper.cpp -> AI pipeline"
   homepage "https://github.com/rursache/vid-summary-cli"
-  url "https://github.com/rursache/vid-summary-cli/archive/refs/tags/v1.0.3.tar.gz"
-  sha256 "a9f71a4bfb441ae26c1cbb4e9a9ded776034517bd07ea3e66fc982fea0593737"
+  url "https://github.com/rursache/vid-summary-cli/archive/refs/tags/v1.0.4.tar.gz"
+  sha256 "4e96be5b9d9755a6804382e27c59a86f277356c8523171002f795e963361acfb"
   license "MIT"
 
   head "https://github.com/rursache/vid-summary-cli.git", branch: "master"
