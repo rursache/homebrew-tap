@@ -4,7 +4,7 @@ cask "velox" do
 
   url "https://github.com/rursache/Velox/releases/download/v#{version}/Velox-#{version}.zip"
   name "Velox"
-  desc "Tiny native Spotlight replacement for macOS"
+  desc "Ultra-fast native macOS Spotlight-style launcher"
   homepage "https://github.com/rursache/Velox"
 
   depends_on macos: :sequoia
