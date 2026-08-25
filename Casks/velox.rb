@@ -1,6 +1,6 @@
 cask "velox" do
-  version "1.0.1"
-  sha256 "a15069d6b6718faa882417e4e3dbec98d11dfdca76eee05f97b5becde4adca59"
+  version "1.0.2"
+  sha256 "e44c623b125b0d7b989bb60f0556434e3e55735a528b628581fb532abca6654c"
 
   url "https://github.com/rursache/Velox/releases/download/v#{version}/Velox-#{version}.zip"
   name "Velox"
