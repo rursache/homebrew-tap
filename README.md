@@ -14,9 +14,9 @@ brew tap rursache/tap
 
 | Formula Name | Description |
 |---------|-------------|
+| [`always-green`](https://github.com/rursache/always-green) | Keep your Slack status green from a laptop or VPS you leave on |
 | [`velox`](https://github.com/rursache/Velox) | Ultra-fast native macOS Spotlight-style launcher |
 | [`vid-summary-cli`](https://github.com/rursache/vid-summary-cli) | Summarize videos via a yt-dlp → ffmpeg → whisper.cpp → AI pipeline |
-| [`always-green`](https://github.com/rursache/always-green) | Keep your Slack status green from a laptop or VPS you leave on |
 | [`calendarplusplus`](https://github.com/rursache/CalendarPlusPlus) | iPad's Apple Calendar timeline event list on macOS |
 | [`watchwise-cli`](https://github.com/rursache/watchwise-cli) | Smart movie & TV show recommender powered by your IMDB ratings |
 | [`reddit-cli`](https://github.com/rursache/reddit-cli) | A quick CLI to read Reddit posts, no API key or auth required |
