@@ -1,11 +1,11 @@
 class AlwaysGreen < Formula
   desc "Keep your Slack status green from a laptop or VPS you leave on"
-  homepage "https://github.com/rursache/always-green"
-  url "https://github.com/rursache/always-green/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "7f986b1da1fa9125b43fb5edd740fd29bad75513fce8ef4aa80ceaa5b1aa43c6"
+  homepage "https://github.com/rursache/always-green-cli"
+  url "https://github.com/rursache/always-green-cli/archive/refs/tags/v1.0.0.tar.gz"
+  sha256 "834128cc746f5aaecdcb311aff66e54268834edf33dc620d4f80511b3182b093"
   license "MIT"
 
-  head "https://github.com/rursache/always-green.git", branch: "master"
+  head "https://github.com/rursache/always-green-cli.git", branch: "master"
 
   depends_on "go" => :build
 
