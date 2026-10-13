@@ -1,6 +1,6 @@
 cask "balatro-mod-manager" do
   version "1.0.0"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  sha256 "a5889c5499c947c4d5d8bd981ea3beca1fd4a77763a81220ab62386d77bf93ef"
 
   url "https://github.com/rursache/balatro-mod-manager/releases/download/v#{version}/Balatro-Mod-Manager-#{version}-macos-universal.zip"
   name "Balatro Mod Manager"
